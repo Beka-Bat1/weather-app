@@ -1,19 +1,39 @@
 /* eslint-disable prettier/prettier */
-import React from 'react';
-import { ScrollView, View, Text, StyleSheet, Image } from 'react-native';
+import React from "react";
+import { ScrollView, View, Text, StyleSheet, Image } from "react-native";
 
-const WeatherData = ({ data }) => {
+const LongWeatherData = ({ data }) => {
   const fahrenheit = (data.main.temp * 1.8 - 459.67).toFixed(2);
   const celsius = (data.main.temp - 273.15).toFixed(2);
-  
+
+  var headers = [];
+
+  for (let i = 0; i < 5; i++) {
+    headers.push(
+      <View style={styles.box}>
+        <Text style={styles.boxLabel}>{data.weather[0].description}</Text>
+        <Image
+          style={styles.image}
+          source={{
+            uri: `http://openweathermap.org/img/wn/${data.weather[0].icon}.png`,
+          }}
+        />
+      </View> 
+    );
+  }
+
   return (
     <View style={styles.container} onStartShouldSetResponder={() => true}>
       <ScrollView style={styles.containerInner}>
-        <Text style={styles.title}>{data.name} - {data.sys.country}</Text>
-        <View style={styles.box}>
-          <Text style={styles.boxLabel}>{data.weather[0].description}</Text>
-          <Image style={styles.image} source={{ uri: `http://openweathermap.org/img/wn/${data.weather[0].icon}.png` }} />
-        </View>
+        <Text style={styles.title}>
+          {data.name} - {data.sys.country}
+        </Text>
+
+        <View style={styles.containerHorizontal}>{headers}</View>
+
+
+        {/* here goes forecastDays.map(day => { ...day.data }) */}
+
         <View style={styles.box}>
           <Text style={styles.boxLabel}>Temp</Text>
           <View style={styles.tempContainer}>
@@ -34,7 +54,6 @@ const WeatherData = ({ data }) => {
           <Text style={styles.boxLabel}>Wind</Text>
           <Text style={styles.boxText}>{data.wind.speed} m/s</Text>
         </View>
-
       </ScrollView>
     </View>
   );
@@ -47,39 +66,43 @@ const styles = StyleSheet.create({
   containerInner: {
     paddingHorizontal: 20,
   },
+  containerHorizontal: {
+    display: "flex",
+    flexDirection: "row",
+  },
   title: {
     fontSize: 24,
-    fontWeight: 'bold',
-    textAlign: 'center',
+    fontWeight: "bold",
+    textAlign: "center",
     marginBottom: 20,
   },
   box: {
     borderWidth: 1,
-    borderColor: '#ddd',
+    borderColor: "#ddd",
     padding: 15,
     marginBottom: 10,
-    alignItems: 'center',
+    alignItems: "center",
   },
   boxLabel: {
-    textTransform: 'uppercase',
+    textTransform: "uppercase",
     fontSize: 12,
     letterSpacing: 1,
     marginBottom: 5,
   },
   boxText: {
     fontSize: 16,
-    fontWeight: 'bold',
+    fontWeight: "bold",
   },
   image: {
     width: 50,
     height: 40,
-    alignContent: 'center',
+    alignContent: "center",
   },
   tempContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    alignSelf: 'stretch',
+    flexDirection: "row",
+    justifyContent: "space-around",
+    alignSelf: "stretch",
   },
 });
 
-export default WeatherData;
+export default LongWeatherData;

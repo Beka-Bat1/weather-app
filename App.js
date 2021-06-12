@@ -8,36 +8,70 @@
  */
 /* eslint-disable prettier/prettier */
 
-import React, { useState } from 'react';
-import { View, StyleSheet, Alert, TouchableWithoutFeedback, Keyboard, Text } from 'react-native';
-import { useDispatch, useSelector } from 'react-redux';
+import React, { useState } from "react";
+import {
+  View,
+  StyleSheet,
+  Alert,
+  TouchableWithoutFeedback,
+  Keyboard,
+} from "react-native";
+import { useDispatch, useSelector } from "react-redux";
 
-import { getWeather } from './store/actions/weatherActions';
-import Form from './components/Form';
-import Weather from './components/Weather';
+import { getWeather } from "./store/actions/weatherActions";
+import Form from "./components/Form";
+import Weather from "./components/Weather";
+import LongWeatherData from "./components/LongWeatherData"
+
 
 const App = () => {
-  const [search, setSearch] = useState('');
+  const [search, setSearch] = useState("batumi");
   const [loading, setLoading] = useState(false);
+  const [longDataVisible, setLongDataVisible] = useState(false);
   const dispatch = useDispatch();
-  const { data, error } = useSelector(state => state.weather);
+  const { data, error } = useSelector((state) => state.weather);
 
   const searchSubmitHandler = () => {
-    if (search === '') {
-      return Alert.alert('Validation', 'City name is required!', [{ text: 'OK' }]);
+    if (search === "") {
+      return Alert.alert("Validation", "City name is required!", [
+        { text: "OK" },
+      ]);
     }
 
     setLoading(true);
-    dispatch(getWeather(search, () => setLoading(false), () => setLoading(false)));
-    setSearch('');
+    dispatch(
+      getWeather(
+        search,
+        () => setLoading(false),
+        () => setLoading(false)
+      )
+    );
+    setSearch("");
+    Keyboard.dismiss();
+  };
+
+  const longWeatherDataSubmit = () => {
+    setLongDataVisible(!longDataVisible);
     Keyboard.dismiss();
   };
 
   return (
     <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
       <View style={styles.container}>
-        <Form search={search} onSetSearch={setSearch} onSubmit={searchSubmitHandler} />
-        <Weather loading={loading} data={data} error={error} />
+        <Form
+          search={search}
+          onSetSearch={setSearch}
+          onSubmit={searchSubmitHandler}
+        />
+        <Weather
+          loading={loading}
+          data={data}
+          error={error}
+          longDataVisible={longDataVisible}
+          longWeatherDataSubmit={longWeatherDataSubmit}
+        />
+
+
       </View>
     </TouchableWithoutFeedback>
   );
@@ -46,8 +80,8 @@ const App = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center'
+    alignItems: "center",
+    justifyContent: "center",
   },
 });
 

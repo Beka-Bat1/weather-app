@@ -1,14 +1,23 @@
 /* eslint-disable prettier/prettier */
-import React from 'react';
-import { View, Text, StyleSheet, ActivityIndicator } from 'react-native';
+import React from "react";
+import { View, Text, StyleSheet, ActivityIndicator, Button } from "react-native";
 
-import WeatherData from './WeatherData';
+import WeatherData from "./WeatherData";
+import LongWeatherData from "./LongWeatherData";
 
-const Weather = ({ loading, data, error }) => {
+const Weather = ({
+  loading,
+  data,
+  error,
+  longDataVisible,
+  longWeatherDataSubmit,
+}) => {
   if (error) {
-    return <View style={styles.container}>
-      <Text style={styles.error}>{error}</Text>
-    </View>;
+    return (
+      <View style={styles.container}>
+        <Text style={styles.error}>{error}</Text>
+      </View>
+    );
   }
 
   if (!loading && !data) {
@@ -17,7 +26,19 @@ const Weather = ({ loading, data, error }) => {
 
   return (
     <View style={styles.container}>
-      { loading ? <ActivityIndicator size="large" color="#00d1b2" /> : <WeatherData data={data} /> }
+    {/* if is loading show loading, if long data asked show, else show normal data */}
+      {loading ? (
+        <ActivityIndicator size="large" color="#00d1b2" />
+      ) : longDataVisible ? (
+         <LongWeatherData data={data} />
+      ) : (
+       <WeatherData data={data} /> 
+      )} 
+        <Button
+          title= {longDataVisible ? "Current Forecast" : "7 Day Forecast" }
+          style={styles.boxLabel}
+          onPress={longWeatherDataSubmit}
+        />
     </View>
   );
 };
@@ -28,9 +49,15 @@ const styles = StyleSheet.create({
     paddingVertical: 20,
   },
   error: {
-    color: 'red',
+    color: "red",
     fontSize: 20,
-    textAlign: 'center',
+    textAlign: "center",
+  },
+  boxLabel: {
+    textTransform: "uppercase",
+    fontSize: 12,
+    letterSpacing: 2,
+    marginBottom: 5,
   },
 });
 
