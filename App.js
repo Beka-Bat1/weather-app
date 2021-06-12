@@ -25,7 +25,7 @@ import LongWeatherData from "./components/LongWeatherData"
 
 
 const App = () => {
-  const [search, setSearch] = useState("batumi");
+  const [search, setSearch] = useState("");
   const [loading, setLoading] = useState(false);
   const [longDataVisible, setLongDataVisible] = useState(false);
   const dispatch = useDispatch();
